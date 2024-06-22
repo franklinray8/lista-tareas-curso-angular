@@ -1,10 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TareasService } from './service/tareas.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  templateUrl: './app.component.html',  
   styleUrls: ['./app.component.css']
+
 })
 export class AppComponent {
-  title = 'my-first-project';
+ 
+  listaTareas:string[] = [];
+  nuevaTarea:string = '';
+  
+  private _tareasService = inject(TareasService)
+  
+  
+  ngOnInit(): void {
+    this.listaTareas = this._tareasService.getTareas();
+  }
+
+  agregarTarea(){
+    this._tareasService.agregarTarea(this.nuevaTarea);
+    this.nuevaTarea = '';
+    this.listaTareas = this._tareasService.getTareas();
+  }
+
+  eliminarTarea(index: number){
+    this._tareasService.eliminarTarea(index);
+    this.listaTareas = this._tareasService.getTareas();
+  }
 }
